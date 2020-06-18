@@ -13,7 +13,20 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+ Route::post('register', 'Auth\RegisterController');
+ Route::post('login', 'Auth\LoginController');
+ Route::post('logout', 'Auth\LogoutController');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+ Route::namespace('Article')
+ ->middleware('auth:api')
+ ->group(function(){
+    Route::post('create-new-article', 'ArticleController@store');
+    Route::patch('update-the-article/{article}', 'ArticleController@update');
+    Route::delete('delete-the-article/{article}', 'ArticleController@destroy');
+ });
+
+ Route::get('/articles/{article}', 'Article\ArticleController@show');
+ Route::get('/articles', 'Article\ArticleController@index');
+
+
+ Route::get('user', 'UserController');
